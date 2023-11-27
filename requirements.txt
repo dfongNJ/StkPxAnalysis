@@ -1,2 +1,2 @@
-dash==>2.14
+dash==2.14
 yfinance
