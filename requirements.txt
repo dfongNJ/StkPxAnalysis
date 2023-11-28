@@ -1,3 +1,4 @@
+python==3.11
 dash==2.14
 yfinance
 gunicorn
