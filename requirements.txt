@@ -1,5 +1,7 @@
 dash==2.14
 yfinance
 gunicorn
-dash_bootstrap_components
-plotly
+dash_bootstrap_components==1.5
+dash-core-components==2.0
+dash-html-components==2.0
+plotly==5.17
