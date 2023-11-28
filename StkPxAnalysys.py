@@ -43,7 +43,6 @@ idxList = ['^DJI', '^GSPC', '^IXIC', '^RUT', 'QQQ', 'KBE', 'KBWB']
 external_stylesheets = [dbc.themes.CYBORG, dbc.icons, dbc.icons.BOOTSTRAP]
 #
 app = Dash(__name__, external_stylesheets=external_stylesheets)
-server = app.server
 #
 tab_style = {
     'borderBottom': '1px solid #d6d6d6',
@@ -1184,19 +1183,19 @@ def triggerAlert(mainInfoBtn, gridBtn, pxvoklBtn, csBtn, bbBtn):
     #
     changed_id = [p['prop_id'] for p in dash.callback_context.triggered][0]
     #
-    match changed_id:
-        case 'mainInfoBtn.n_clicks':
-            return True, dash.no_update, dash.no_update, dash.no_update, dash.no_update
-        case 'gridBtn.n_clicks':
-            return dash.no_update, True, dash.no_update, dash.no_update, dash.no_update
-        case 'pxvolBtn.n_clicks':
-            return dash.no_update, dash.no_update, True, dash.no_update, dash.no_update
-        case 'csBtn.n_clicks':
-            return dash.no_update, dash.no_update, dash.no_update, True, dash.no_update
-        case 'bbBtn.n_clicks':
-            return dash.no_update, dash.no_update, dash.no_update, dash.no_update, True
-        case _:
-            raise PreventUpdate
+    # match changed_id:
+    if changed_id == 'mainInfoBtn.n_clicks':
+        return True, dash.no_update, dash.no_update, dash.no_update, dash.no_update
+    elif changed_id == 'gridBtn.n_clicks':
+        return dash.no_update, True, dash.no_update, dash.no_update, dash.no_update
+    elif changed_id == 'pxvolBtn.n_clicks':
+        return dash.no_update, dash.no_update, True, dash.no_update, dash.no_update
+    elif changed_id == 'csBtn.n_clicks':
+        return dash.no_update, dash.no_update, dash.no_update, True, dash.no_update
+    elif changed_id == 'bbBtn.n_clicks':
+        return dash.no_update, dash.no_update, dash.no_update, dash.no_update, True
+    else:
+        raise PreventUpdate
 #
 
 if __name__ == "__main__":
