@@ -43,6 +43,7 @@ idxList = ['^DJI', '^GSPC', '^IXIC', '^RUT', 'QQQ', 'KBE', 'KBWB']
 external_stylesheets = [dbc.themes.CYBORG, dbc.icons, dbc.icons.BOOTSTRAP]
 #
 app = Dash(__name__, external_stylesheets=external_stylesheets)
+server = app.server
 #
 tab_style = {
     'borderBottom': '1px solid #d6d6d6',
