@@ -1,3 +1,5 @@
 dash==2.14
 yfinance
 gunicorn
+dash_bootstrap_components
+plotly
