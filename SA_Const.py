@@ -6,11 +6,11 @@ mainInstrAlert = html.Div([
             html.H5('Stock Trend Analysis', className='fw-bold text-black text-center'), html.Br(),
             'Purpose of this app is to allow the user to visualize potential trend(s) of security prices.', html.Br(),
             html.B('The analysis provides for:'), html.Br(), html.Br(),
-            html.B('Grid Data Table:'), html.Br(), html.Br(),
+            html.B('Grid Data Table:'), html.Br(),
             html.Ul([
                 html.Li('Price extract for specified period (default/initial: most recent period)'),
             ]),
-            html.B('Price/Volume Chart:'), html.Br(), html.Br(),
+            html.B('Price/Volume Chart:'), html.Br(),
             html.Ul([
                 html.Li('Closing price movement'),
                 html.Li('Trading volume'),
