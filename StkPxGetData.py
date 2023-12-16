@@ -29,13 +29,14 @@ def get_all_by_isin(isin, proxy=None, session=None):
         return (isin + '-unable to get name')
     #
     data = data.json()
+    # print(data)
     for ix in range(0, data.get('count')):
         ticker = data.get('quotes', [{}])[ix]
         if isin == ticker['symbol']:
             break
     #
     return ticker['longname']
-#
+
 
 class PxData:
 
