@@ -1,6 +1,35 @@
 from dash import html
 import dash_bootstrap_components as dbc
 
+#  List pf index symbols
+idxList = ['^DJI', '^GSPC', '^IXIC', '^RUT', 'QQQ', 'KBE', 'KBWB']
+# External stylesheets parameters
+external_stylesheets = [dbc.themes.CYBORG, dbc.icons, dbc.icons.BOOTSTRAP]
+#  Page tabs styles (normal and selected)
+tab_style = {
+    'borderBottom': '1px solid #d6d6d6',
+    'padding': '6px',
+    'font-style': 'normal',
+    # 'font-size': '16px',
+    'fontweight': 'bold',
+    'border-radius': '5px'
+}
+#
+tab_selected_style = {
+    'borderTop': '1px solid #d6d6d6',
+    'borderBottom': '1px solid #d6d6d6',
+    'backgroundColor': 'lightblue',
+    'color': 'red',
+    'fontweight': 'bold',
+    'font-size': '18px',
+    'font-style': 'italic',
+    'padding': '6px',
+    'border-radius': '5px'
+}
+#  Default date adjustment variables used for date selection range
+minNights = 0   # minimum nights(days) between start and end date
+dfltstrt = 7    # number of days (default) between start and end dates
+nbryears = 5    # max number of years for date range selection
 # Main instructions description
 mainInstrAlert = html.Div([
             html.H5('Stock Trend Analysis', className='fw-bold text-black text-center'), html.Br(),
