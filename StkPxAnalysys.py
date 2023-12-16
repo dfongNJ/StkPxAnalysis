@@ -38,29 +38,9 @@ def get_RSI(df, period=14, oBought=70, oSold=30):
     return df
 
 pxdf = pd.DataFrame()
-idxList = ['^DJI', '^GSPC', '^IXIC', '^RUT', 'QQQ', 'KBE', 'KBWB']
 #
-external_stylesheets = [dbc.themes.CYBORG, dbc.icons, dbc.icons.BOOTSTRAP]
-#
-app = Dash(__name__, external_stylesheets=external_stylesheets)
-server = app.server
-#
-tab_style = {
-    'borderBottom': '1px solid #d6d6d6',
-    'padding': '6px',
-    'font-style': 'normal',
-    'fontweight': 'bold'
-}
-#
-tab_selected_style = {
-    'borderTop': '1px solid #d6d6d6',
-    'borderBottom': '1px solid #d6d6d6',
-    'backgroundColor': 'lightblue',
-    'color': 'black',
-    'fontweight': 'bold',
-    'font-style': 'italic',
-    'padding': '6px'
-}
+app = Dash(__name__, external_stylesheets=Const.external_stylesheets)
+# server = app.server  #  For deployment to on render
 #
 ticker1_input = html.Div(dbc.Row(
     [
@@ -147,25 +127,21 @@ index_selection = html.Div(dbc.Row(
             width=8)],
     className='me-2 pt-3'
 ))
-#  Default date adjustment variables
-minNights = 0
-dfltstrt = 7
-nbryears = 5
 #
 strtEnd_Dte_Input = html.Div(dbc.Row(children=[
     dbc.Label('Price dates', html_for='strtEndDte-date',
               class_name='fw-bold'),
     dbc.Col(children=[
         dcc.DatePickerRange(
-            start_date=(dt.datetime.today() - relativedelta(days=dfltstrt)),
+            start_date=(dt.datetime.today() - relativedelta(days=Const.dfltstrt)),
             end_date=dt.datetime.today(),
-            min_date_allowed=(dt.datetime.today() - relativedelta(years=nbryears)),
+            min_date_allowed=(dt.datetime.today() - relativedelta(years=Const.nbryears)),
             max_date_allowed=dt.datetime.today(),
             updatemode='singledate',
             day_size=33,
             clearable=False,
             display_format='D MMM Y',
-            minimum_nights=minNights,
+            minimum_nights=Const.minNights,
             className='fw-bold fst-italic',
             # style={'font-weight': 'bold',
             #        'fontSize': '8'},
@@ -282,7 +258,7 @@ stkpxtbl = DataTable(
     ],
     tooltip_duration=None
 )
-#
+# Grid table filter layout
 gridtblfilter = html.Div([
     dbc.Stack([
         dbc.Label('Date Range:', class_name='fw-bold'),
@@ -306,7 +282,7 @@ gridtblfilter = html.Div([
         is_open=False, className='pt-5, cols=8'
     )
 ])
-#
+# Price/Volume filter layout
 pxvolfilter = html.Div([
     dbc.Stack([
         dbc.Label('Ticker(s):', class_name='fw-bold'),
@@ -330,9 +306,9 @@ pxvolfilter = html.Div([
         html.Div([
             dcc.Dropdown(options={
                 'SMA': 'Simple Moving Average',
-                'EWMA': 'Exponential Moving Average'
+                'EMA': 'Exponential Moving Average'
             },
-                 value='EWMA', id='pxvolMASel', multi=False, clearable=False, className='fw-bold w-100'),
+                 value='EMA', id='pxvolMASel', multi=False, clearable=False, className='fw-bold w-100'),
             ],
             style={'width': '230px'},),
         dbc.Button('', id="pxvolBtn",
@@ -369,9 +345,9 @@ csfilter = html.Div([
         html.Div([
             dcc.Dropdown(options={
                 'SMA': 'Simple Moving Average',
-                'EWMA': 'Exponential Moving Average'
+                'EMA': 'Exponential Moving Average'
             },
-                 value='EWMA', id='csMASel', multi=False, clearable=False, className='fw-bold w-100'),
+                 value='EMA', id='csMASel', multi=False, clearable=False, className='fw-bold w-100'),
             ],
             style={'width': '230px'},),
         dbc.Button('', id="csBtn",
@@ -437,9 +413,18 @@ bbfilter = html.Div([
         html.Div([
             dcc.Dropdown(options={
                 'SMA': 'Simple Moving Average',
-                'EWMA': 'Exponential Moving Average'
+                'EMA': 'Exponential Moving Average'
             },
                  value='SMA', id='bbMASel', multi=False, clearable=False, className='fw-bold w-100'),
+            ],
+            style={'width': '230px'},),
+        dbc.Label('Close/Candlestick:', class_name='fw-bold'),
+        html.Div([
+            dcc.Dropdown(options={
+                'Close': 'Closing Price',
+                'CS': 'Candlestick Price'
+            },
+                 value='CS', id='bbPxSel', multi=False, clearable=False, className='fw-bold w-100'),
             ],
             style={'width': '230px'},),
         dbc.Button('', id='bbBtn',
@@ -501,7 +486,7 @@ app.layout = dbc.Container(html.Div([
     dcc.Store(id='SelParamStoreBB', storage_type='memory'),
     html.H4(children='Stock Price Trend Analysis', id='pgHdr',style={'textAlign': 'center'}),
     dcc.Tabs([
-        dcc.Tab(label='Main', id='mainTab', style=tab_style, selected_style=tab_selected_style,
+        dcc.Tab(label='Main', id='mainTab', style=Const.tab_style, selected_style=Const.tab_selected_style,
                 children=[
                     dbc.Row([
                         dbc.Col([
@@ -514,7 +499,7 @@ app.layout = dbc.Container(html.Div([
                             width=True),
                     ], className='g-0')
                 ]),
-        dcc.Tab(label='Price/Volume Chart', id='pxVolTab', style=tab_style, selected_style=tab_selected_style,
+        dcc.Tab(label='Price/Volume Chart', id='pxVolTab', style=Const.tab_style, selected_style=Const.tab_selected_style,
                 children=[dbc.Row(html.H5('Price/Volume Chart'),
                                   style={'text-align': 'center'},
                                   justify='center'),
@@ -525,9 +510,9 @@ app.layout = dbc.Container(html.Div([
                                 )], start_collapsed=True
                           ),
                           dcc.Graph(id='pxvolumechart',
-                                    className='ms-1 me-2 mh-auto')
+                                    className='ms-1 me-2 mh-100')
                           ]),
-        dcc.Tab(label='Candlestick Chart', id='candleTab', style=tab_style, selected_style=tab_selected_style,
+        dcc.Tab(label='Candlestick Chart', id='candleTab', style=Const.tab_style, selected_style=Const.tab_selected_style,
                 children=[dbc.Row(html.H5('Candlestick Chart'),
                                   style={'text-align': 'center'},
                                   justify='center'),
@@ -537,9 +522,9 @@ app.layout = dbc.Container(html.Div([
                                     title='Candlestick Chart Parameters',
                                 )], start_collapsed=True
                           ),
-                          dcc.Graph(id='candlechart', className='ms-1 me-2 mh-auto')
+                          dcc.Graph(id='candlechart', className='ms-1 me-2 mh-100')
                       ]),
-        dcc.Tab(label='Bollinger Band® Chart', id='bollBTab', style=tab_style, selected_style=tab_selected_style,
+        dcc.Tab(label='Bollinger Band® Chart', id='bollBTab', style=Const.tab_style, selected_style=Const.tab_selected_style,
                 children=[dbc.Row(html.H5('Bollinger Band® Chart'),
                                   style={'text-align': 'center'},
                                   justify='center'),
@@ -549,11 +534,11 @@ app.layout = dbc.Container(html.Div([
                                 title='Bollinger Band® Parameters',
                             )], start_collapsed=True
                           ),
-                          dcc.Graph(id='bollingerchart', className='ms-1 me-2 mh-auto')
+                          dcc.Graph(id='bollingerchart', className='ms-1 me-2 mh-100')
                       ]),
 
     ], className='ms-1 me-2')
-]), className='ms-1 me-2', fluid=True)
+]), className='ms-1 me-2, mh-100', fluid=True, style={'height': 850})
 #
 app.title = 'Stock Analysis'
 
@@ -620,7 +605,7 @@ def mainselection(n_clicks, tkr1value, tkr2value, start_date_str, end_date_str, 
             return dash.no_update, dash.no_update, True
         # create dictionary of ticker and stock name for use in subsequent filters
         SelTkrOptions.update({tkrlist[ix]: stkNme})
-        if tkrlist[ix] in idxList:
+        if tkrlist[ix] in Const.idxList:
             IdxSelected = True
     #
     selData = {'SelTkrOption': SelTkrOptions,
@@ -748,7 +733,7 @@ def showPVChart(pxvolTickerSel, pxvolSMAShrtSel, pxvolSMAlongSel, pxvolMASel, Px
             chartTitle = chartTitle + ' / '
         chartTitle = chartTitle + stknme
         #
-        if pxvolTickerSel[ix] in idxList and ix > 0:
+        if pxvolTickerSel[ix] in Const.idxList and ix > 0:
             sec_Y=True
         else:
             sec_Y=False
@@ -1012,6 +997,7 @@ def triggerBB(SelParamData, SelParamTS):
     Input('bbSMASel', 'value'),
     Input('bbSDSel', 'value'),
     Input('bbMASel', 'value'),
+    Input('bbPxSel', 'value'),
     Input('bbRSIPdSel', 'value'),
     Input('bbRSIOBSel', 'value'),
     Input('bbRSIOSSel', 'value'),
@@ -1019,7 +1005,7 @@ def triggerBB(SelParamData, SelParamTS):
     prevent_initial_call=True
 )
 # Generate Bollinger Band chart based on filter
-def showBBChart(bbTickerSel, bbSMASel, bbSDSel, bbMASel, bbRSIPdSel, bbRSIOBSel, bbRSIOSSel, PxXtrData):
+def showBBChart(bbTickerSel, bbSMASel, bbSDSel, bbMASel, bbPxSel, bbRSIPdSel, bbRSIOBSel, bbRSIOSSel, PxXtrData):
     print(dt.datetime.now().strftime('%d%b%Y-%H:%M:%S.%f') + ' - showBBchart')
     #
     if bbTickerSel is None or bbTickerSel == '':
@@ -1033,7 +1019,8 @@ def showBBChart(bbTickerSel, bbSMASel, bbSDSel, bbMASel, bbRSIPdSel, bbRSIOBSel,
     #
     bbDF = pxDataDF[pxDataDF['Ticker'] == bbTickerSel]
     bbDF.set_index('Trade Dte',drop=True, inplace=True)
-    chartTitle = bbDF['Name'].unique()[0]
+    stknme = bbDF['Name'].unique()[0]
+    chartTitle = stknme
     RSIdf = get_RSI(bbDF, bbRSIPdSel, oBought, oSold)
     #
     df = bbDF['Close'].to_frame()
@@ -1086,11 +1073,21 @@ def showBBChart(bbTickerSel, bbSMASel, bbSDSel, bbMASel, bbRSIPdSel, bbRSIOBSel,
                                line={'color': 'black'}
                                ))
     #
-    bbClose = go.Scatter(dict(x=bbDF.index,
-                              y=bbDF['Close'],
-                              name='Close',
-                              # line={'color': '#636EFA'}
-                              ))
+    if bbPxSel == 'Close':
+        bbClose = go.Scatter(dict(x=bbDF.index,
+                                  y=bbDF['Close'],
+                                  name='Close',
+                                  # line={'color': '#636EFA'}
+                                  ))
+    else:
+    # candlestick plot
+        bbClose = go.Candlestick(dict(x=bbDF.index,
+                                 close=bbDF['Close'],
+                                 open=bbDF['Open'],
+                                 high=bbDF['High'],
+                                 low=bbDF['Low'],
+                                 text=stknme,
+                                 name=(bbTickerSel + ' - Candlestick')))
     #
     bbMA = go.Scatter(dict(x=sma.index,
                            y=sma['Close'],
@@ -1117,6 +1114,7 @@ def showBBChart(bbTickerSel, bbSMASel, bbSDSel, bbMASel, bbRSIPdSel, bbRSIOBSel,
                                     size=10,
                                      )
                                 ))
+    #
     bbfig.add_trace(bbLowerB, row=1, col=1)
     bbfig.add_trace(bbUpperB, row=1, col=1)
     bbfig.add_trace(bbClose, row=1, col=1)
@@ -1156,6 +1154,7 @@ def showBBChart(bbTickerSel, bbSMASel, bbSDSel, bbMASel, bbRSIPdSel, bbRSIOBSel,
              yaxis_title='<b>Price</b>',
              height=750,
              paper_bgcolor='lightblue',
+             xaxis_rangeslider_visible=False,
              legend=(dict(entrywidth=0, bgcolor='white'))
              ))
     bbfig.update_xaxes(showspikes=True)
