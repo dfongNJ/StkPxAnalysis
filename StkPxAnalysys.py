@@ -40,7 +40,7 @@ def get_RSI(df, period=14, oBought=70, oSold=30):
 pxdf = pd.DataFrame()
 #
 app = Dash(__name__, external_stylesheets=Const.external_stylesheets)
-# server = app.server  #  For deployment to on render
+server = app.server  #  For deployment to on render
 #
 ticker1_input = html.Div(dbc.Row(
     [
