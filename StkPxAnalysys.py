@@ -40,7 +40,7 @@ def get_RSI(df, period=14, oBought=70, oSold=30):
 pxdf = pd.DataFrame()
 #
 app = Dash(__name__, external_stylesheets=Const.external_stylesheets)
-server = app.server  #  For deployment to on render
+# server = app.server  #  For deployment to on render
 #
 ticker1_input = html.Div(dbc.Row(
     [
@@ -738,7 +738,7 @@ def showPVChart(pxvolTickerSel, pxvolSMAShrtSel, pxvolSMAlongSel, pxvolMASel, Px
         else:
             sec_Y=False
         #
-        if pxvolMASel == '?SMA':
+        if pxvolMASel == 'SMA':
             pvDF['smaShrt'] = pvDF['Close'].rolling(window=pxvolSMAShrtSel).mean().dropna()
             pvDF['smaLong'] = pvDF['Close'].rolling(window=pxvolSMAlongSel).mean().dropna()
         else:
