@@ -753,7 +753,7 @@ def showPVChart(pxvolTickerSel, pxvolSMAShrtSel, pxvolSMAlongSel, pxvolMASel, Px
         if not SelParamStorePV['IdxSelected'] and pvDF['Volume'].max() > 0:
             pxvolfig.add_trace(go.Bar(x=pvDF.index,
                               y=pvDF['Volume'],
-                              opacity=1,
+                              opacity=0.3,
                               text=stknme,
                               name=(pxvolTickerSel[ix] + ' Volume')
                               ), secondary_y=True)
@@ -888,6 +888,7 @@ def showCSChart(csTickerSel, csSMAShrtSel, csMASel, csRSIPdSel, csRSIOBSel, csRS
     csSMAplot = go.Scatter(dict(x=csDF.index,
                            y=csDF['smaShrt'],
                            text=stknme,
+                           opacity=0.5,
                            name=(csTickerSel + ' ' + str(csSMAShrtSel) + ' Periods ' + csMASel)
                                 ))
     # upside cross over plot
@@ -943,6 +944,7 @@ def showCSChart(csTickerSel, csSMAShrtSel, csMASel, csRSIPdSel, csRSIOBSel, csRS
                           y=[oBought, oBought],
                           text=stknme,
                           line={'color': 'green'},
+                          opacity=0.4,
                           name='RSI Over Bought Line'
                          ))
     # RSI overbought line
@@ -950,6 +952,7 @@ def showCSChart(csTickerSel, csSMAShrtSel, csMASel, csRSIPdSel, csRSIOBSel, csRS
                           y=[oSold, oSold],
                           text=stknme,
                           line={'color': 'red'},
+                          opacity=0.4,
                           name='RSI Over Sold Line'
                          ))
     csfig.add_trace(csRSI, row=2, col=1)
@@ -1077,6 +1080,7 @@ def showBBChart(bbTickerSel, bbSMASel, bbSDSel, bbMASel, bbPxSel, bbRSIPdSel, bb
         bbClose = go.Scatter(dict(x=bbDF.index,
                                   y=bbDF['Close'],
                                   name='Close',
+                                 opacity=0.5,
                                   # line={'color': '#636EFA'}
                                   ))
     else:
@@ -1087,6 +1091,7 @@ def showBBChart(bbTickerSel, bbSMASel, bbSDSel, bbMASel, bbPxSel, bbRSIPdSel, bb
                                  high=bbDF['High'],
                                  low=bbDF['Low'],
                                  text=stknme,
+                                 opacity=0.6,
                                  name=(bbTickerSel + ' - Candlestick')))
     #
     bbMA = go.Scatter(dict(x=sma.index,
@@ -1133,6 +1138,7 @@ def showBBChart(bbTickerSel, bbSMASel, bbSDSel, bbMASel, bbPxSel, bbRSIPdSel, bb
                           y=[oBought, oBought],
                           text=chartTitle,
                           line={'color': 'green'},
+                          opacity=0.4,
                           # yaxis='y2',
                           name='RSI Over Bought'
                           ))
@@ -1141,6 +1147,7 @@ def showBBChart(bbTickerSel, bbSMASel, bbSDSel, bbMASel, bbPxSel, bbRSIPdSel, bb
                           y=[oSold, oSold],
                           text=chartTitle,
                           line={'color': 'red'},
+                          opacity=0.4,
                           # yaxis='y2',
                           name='RSI Over Sold'
                           ))
